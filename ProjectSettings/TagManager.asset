@@ -6,6 +6,14 @@ TagManager:
   tags:
   - Ball
   - Limits
+  - PowerUp
+  - +ball
+  - SpeedUp
+  - SpeedDown
+  - Escudo
+  - Score2x
+  - Invisible
+  - crazyPlayer
   layers:
   - Default
   - TransparentFX
@@ -15,7 +23,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Ball
   - 
   - 
   - 

@@ -10,10 +10,11 @@ public class Playermove : MonoBehaviour {
 	private GameObject bola;
 	float speed =30;
 	float anglespeed= 720;
+    private bool crazyPlayer;
     
 	// Use this for initialization
 	void Start () {
-       
+        crazyPlayer = false;
 		speed = 20;
 		anglespeed = 720;
 		direction = Random.Range (0, 4);
@@ -26,8 +27,8 @@ public class Playermove : MonoBehaviour {
        
 		if (start) {
 			try {			
-				speed = (30 * bola.GetComponent<BallMove> ().speed) / 2.5f;
-				anglespeed = (bola.GetComponent<BallMove> ().speed * anglespeed) / 2.5f;
+				speed = (30 * 8) / 2.5f;
+				anglespeed = (8 * anglespeed) / 2.5f;
 			} catch {
 			}
 			if (Vector3.Distance (transform.position, Places [direction].position) >= 0.1f || Vector3.Distance (transform.rotation.eulerAngles, Places [direction].rotation.eulerAngles) >= 0.1f) {		
@@ -44,27 +45,29 @@ public class Playermove : MonoBehaviour {
 			if (Input.GetKeyDown (KeyCode.RightArrow))
 				right ();
 			if (Input.GetKeyDown (KeyCode.DownArrow))
-				Down ();
-			
-
+				Down ();			
 		}
 	}
 
 	public void Up()
 	{
-		direction = 0;
+        if (crazyPlayer) direction = Random.Range(0, 4);
+        else direction = 0;
 	}
 	public void Down()
 	{
-		direction = 1;
+        if (crazyPlayer) direction = Random.Range(0, 4);
+        else direction = 1;
 	}
 	public void left()
 	{
-		direction = 2;
+        if (crazyPlayer) direction = Random.Range(0, 4);
+        else direction = 2;
 	}
 	public void right()
 	{
-		direction = 3;
+        if (crazyPlayer) direction = Random.Range(0, 4);
+        else direction = 3;
 	}
 
 	public void startgame()
@@ -78,16 +81,19 @@ public class Playermove : MonoBehaviour {
 	{
 		GameObject ball = Resources.Load ("Prefab/Ball") as GameObject;
 		yield return new WaitForSeconds (1);
-		bola =Instantiate (ball, new Vector3 (0, 0, 0),Quaternion.identity) as GameObject;
+		bola =Instantiate (ball, new Vector3 (0, 0,0),Quaternion.identity) as GameObject;
 		bola.GetComponent<BallMove> ().direction = direction;
-       // bola.GetComponent<BallMove>().LookandGO(Places[direction].position, bola.GetComponent<BallMove>().speed,bola);
 
+	} 
+	public IEnumerator ball()
+	{
+        if (GameObject.FindGameObjectsWithTag("Ball").Length < 3)
+        {
+            yield return new WaitForSeconds(1);
+            StartCoroutine(waitBall());
+        }
 	}
-   
-   
-
-
-	int randomDirection(int actualdirection)
+   	int randomDirection(int actualdirection)
 	{
 		int rand = Random.Range (0, Places.Length);
 		if (rand == actualdirection) {
@@ -95,5 +101,13 @@ public class Playermove : MonoBehaviour {
 		} else
 			return rand;
 	}
+    public IEnumerator crazyplayerpw ()
+    {
+        crazyPlayer = true;
+        Time.timeScale = 0.7f;
+        yield return new WaitForSeconds(8);
+        Time.timeScale = 1;
+        crazyPlayer = false;
+    }
 }
 
