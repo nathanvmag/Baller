@@ -105,7 +105,7 @@ public class Playermove : MonoBehaviour {
     {
         crazyPlayer = true;
         Time.timeScale = 0.7f;
-        yield return new WaitForSeconds(8);
+        yield return new WaitForSeconds(3);
         Time.timeScale = 1;
         crazyPlayer = false;
     }

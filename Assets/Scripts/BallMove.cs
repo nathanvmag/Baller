@@ -46,6 +46,7 @@ public class BallMove : MonoBehaviour {
                    speed = speed >= 8 ? speed : speed += 0.07f;
                    LookandGO(places[direction].position, speed);
                    teleport = false;
+					gm.SetScore += mult*1;
                }
         if (perdeu)
         {
@@ -69,7 +70,7 @@ public class BallMove : MonoBehaviour {
         if (coll.gameObject.tag == "Player")
         {
             gm.randPowerup();
-            gm.SetScore += mult*1;
+            
            switch (direction)
            {
                 case 0:
@@ -152,7 +153,7 @@ public class BallMove : MonoBehaviour {
     {
         if (coll.gameObject.tag == "Player")
         {
-            gm.SetScore += mult * 1;
+            
             switch (direction)
             {
                 case 0:

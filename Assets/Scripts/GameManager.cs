@@ -10,13 +10,12 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool escudo;
     [SerializeField] Sprite shieldImg;
     private int  score;
-    private Text scoretx;
+	[SerializeField] private Text scoretx;
     private bool invisible;
     // Use this for initialization
     void Start()
     {
-        invisible = false;
-        scoretx = GameObject.Find("ScoreTx").GetComponent<Text>();
+        invisible = false;        
         score = 0;
         limits = GameObject.FindGameObjectsWithTag("Limits");
         escudo = false;
