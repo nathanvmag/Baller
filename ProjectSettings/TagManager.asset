@@ -14,6 +14,10 @@ TagManager:
   - Score2x
   - Invisible
   - crazyPlayer
+  - flashing
+  - death
+  - coin
+  - Updown
   layers:
   - Default
   - TransparentFX
@@ -24,7 +28,7 @@ TagManager:
   - 
   - 
   - Ball
-  - 
+  - Powerup
   - 
   - 
   - 

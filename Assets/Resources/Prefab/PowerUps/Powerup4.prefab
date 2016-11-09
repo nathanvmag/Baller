@@ -21,7 +21,7 @@ GameObject:
   - 4: {fileID: 4000013750618286}
   - 212: {fileID: 212000012490790706}
   - 61: {fileID: 61000013680769140}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Powerup4
   m_TagString: Escudo
   m_Icon: {fileID: 0}

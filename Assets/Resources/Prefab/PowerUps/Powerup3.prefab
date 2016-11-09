@@ -21,7 +21,7 @@ GameObject:
   - 4: {fileID: 4000011008682024}
   - 212: {fileID: 212000010457894250}
   - 61: {fileID: 61000014249517636}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Powerup3
   m_TagString: SpeedDown
   m_Icon: {fileID: 0}

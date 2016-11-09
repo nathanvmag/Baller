@@ -21,7 +21,7 @@ GameObject:
   - 4: {fileID: 4000011505887762}
   - 212: {fileID: 212000011665897980}
   - 61: {fileID: 61000011956634440}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Powerup6
   m_TagString: Invisible
   m_Icon: {fileID: 0}

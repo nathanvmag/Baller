@@ -21,7 +21,7 @@ GameObject:
   - 4: {fileID: 4000012489476908}
   - 212: {fileID: 212000013895016098}
   - 61: {fileID: 61000014087656854}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Powerup5
   m_TagString: Score2x
   m_Icon: {fileID: 0}

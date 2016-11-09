@@ -16,9 +16,14 @@ public class BallMove : MonoBehaviour {
     GameManager gm;
     static int mult;
     CameraShakeScript camerashake;
+     bool death= false ;
+    public static Material trailtx;
    	// Use this for initialization
 	void Start ()
     {
+        trailtx = GetComponent<TrailRenderer>().material;
+
+        death = false;
         camerashake = GetComponent<CameraShakeScript>();
         mult = 1;
         gm = Camera.main.GetComponent<GameManager>();
@@ -31,19 +36,19 @@ public class BallMove : MonoBehaviour {
 		places [2] = GameObject.Find ("PlaceLeft").transform;
 		places [3] = GameObject.Find ("PlaceRight").transform;
 		player = GameObject.Find ("Player");
-        Balltouch = Resources.Load("Prefab/BallTouch") as GameObject;
+        Balltouch = Resources.Load("Prefab/Particles/BallTouch") as GameObject;
         LookandGO(places[direction].position, speed);      
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        
+        GetComponent<TrailRenderer>().material = trailtx;
         balls = GameObject.FindGameObjectsWithTag("Ball");
 		       if (teleport)
                {
                    randDire = randomDirection(direction);
                    direction = randDire;
-                   speed = speed >= 8 ? speed : speed += 0.07f;
+                   speed = speed >= 8 ? speed : speed += 0.04f;
                    LookandGO(places[direction].position, speed);
                    teleport = false;
 					gm.SetScore += mult*1;
@@ -69,42 +74,54 @@ public class BallMove : MonoBehaviour {
     {
         if (coll.gameObject.tag == "Player")
         {
-            gm.randPowerup();
-            
-           switch (direction)
-           {
-                case 0:
-                    transform.position = new Vector3(transform.position.x,coll.gameObject.transform.position.y)+ new Vector3(0, -offset, 0);
-                    break;
-                case 1:
-                    transform.position = new Vector3(transform.position.x, coll.gameObject.transform.position.y) + new Vector3(0, offset, 0);
-                    break;
-                case 2:
-                    transform.position = new Vector3(coll.gameObject.transform.position.x, transform.position.y) + new Vector3(offset, 0, 0);
-                    break;
-                case 3:
-                    transform.position = new Vector3(coll.gameObject.transform.position.x, transform.position.y) + new Vector3(-offset, 0, 0);
-                    break;
-           }
-           camerashake.Shake();
-           GameObject g = Instantiate(Balltouch, transform.position, coll.transform.rotation) as GameObject;
-          
-           Destroy(g, 1);
-           teleport = true;
-        }
-        if (coll.gameObject.tag == "Limits")
-        {
-            if (gm.escudo)
+            if (!death)
             {
-                StartCoroutine(ignorecolission());
+                gm.randPowerup();
+
+                switch (direction)
+                {
+                    case 0:
+                        transform.position = new Vector3(transform.position.x, coll.gameObject.transform.position.y) + new Vector3(0, -offset, 0);
+                        break;
+                    case 1:
+                        transform.position = new Vector3(transform.position.x, coll.gameObject.transform.position.y) + new Vector3(0, offset, 0);
+                        break;
+                    case 2:
+                        transform.position = new Vector3(coll.gameObject.transform.position.x, transform.position.y) + new Vector3(offset, 0, 0);
+                        break;
+                    case 3:
+                        transform.position = new Vector3(coll.gameObject.transform.position.x, transform.position.y) + new Vector3(-offset, 0, 0);
+                        break;
+                }
+                camerashake.Shake();
+                GameObject g = Instantiate(Balltouch, transform.position, coll.transform.rotation) as GameObject;
+
+                Destroy(g, 1);
                 teleport = true;
             }
             else
             {
                 rb.velocity = Vector3.zero;
-                
                 perdeu = true;
             }
+        }
+        if (coll.gameObject.tag == "Limits")
+        {
+            if (!death)
+            {
+                if (gm.escudo)
+                {
+                    StartCoroutine(ignorecolission());
+                    teleport = true;
+                }
+                else
+                {
+                    rb.velocity = Vector3.zero;
+
+                    perdeu = true;
+                }
+            }
+            else teleport = true;
         }
 
         
@@ -145,7 +162,27 @@ public class BallMove : MonoBehaviour {
         {
             Destroy(coll.gameObject);
             StartCoroutine(player.GetComponent<Playermove>().crazyplayerpw());
+        } if (coll.gameObject.tag == "flashing")
+        {
+            Destroy(coll.gameObject);
+            StartCoroutine(flash());
         }
+        if (coll.gameObject.tag == "death")
+        {
+            Destroy(coll.gameObject);
+            StartCoroutine(deathPW());
+        }
+        if (coll.gameObject.tag == "coin")
+        {
+            Destroy(coll.gameObject);
+            gm.SetCoins++;
+        }
+        if (coll.gameObject.tag == "Updown")
+        {
+            Destroy(coll.gameObject);
+            gm.updonw();
+        }
+        
         
     }
 
@@ -153,36 +190,48 @@ public class BallMove : MonoBehaviour {
     {
         if (coll.gameObject.tag == "Player")
         {
-            
-            switch (direction)
+            if (!death)
             {
-                case 0:
-                    transform.position = new Vector3(transform.position.x,coll.gameObject.transform.position.y)+ new Vector3(0, -offset, 0);
-                    break;
-                case 1:
-                    transform.position = new Vector3(transform.position.x, coll.gameObject.transform.position.y) + new Vector3(0, offset, 0);
-                    break;
-                case 2:
-                    transform.position = new Vector3(coll.gameObject.transform.position.x, transform.position.y) + new Vector3(offset, 0, 0);
-                    break;
-                case 3:
-                    transform.position = new Vector3(coll.gameObject.transform.position.x, transform.position.y) + new Vector3(-offset, 0, 0);
-                    break;
+                switch (direction)
+                {
+                    case 0:
+                        transform.position = new Vector3(transform.position.x, coll.gameObject.transform.position.y) + new Vector3(0, -offset, 0);
+                        break;
+                    case 1:
+                        transform.position = new Vector3(transform.position.x, coll.gameObject.transform.position.y) + new Vector3(0, offset, 0);
+                        break;
+                    case 2:
+                        transform.position = new Vector3(coll.gameObject.transform.position.x, transform.position.y) + new Vector3(offset, 0, 0);
+                        break;
+                    case 3:
+                        transform.position = new Vector3(coll.gameObject.transform.position.x, transform.position.y) + new Vector3(-offset, 0, 0);
+                        break;
+                }
+                camerashake.Shake();
+                GameObject g = Instantiate(Balltouch, transform.position, coll.transform.rotation) as GameObject;
+
+
+                Destroy(g, 1);
+                teleport = true;
             }
-            camerashake.Shake();
-            GameObject g = Instantiate(Balltouch, transform.position, coll.transform.rotation) as GameObject;
-           
-            
-            Destroy(g, 1);
-            teleport = true;
+            else 
+            {rb.velocity= Vector3.zero;
+                perdeu = true;
          }
+        }
         if (coll.gameObject.tag == "Limits")
         {
+            if (!death){
             rb.velocity = Vector3.zero;
             perdeu = true;
+            }
+
+            else teleport = true ;
+
+        }
         }
         
-    }   
+     
     
 	public void LookandGO(Vector3 positiontolook,float speed)
 	{
@@ -223,6 +272,29 @@ public class BallMove : MonoBehaviour {
         mult = 2;
         yield return new WaitForSeconds(10);
         mult = 1;
+    }
+    IEnumerator flash()
+    {
+        int count =0;
+        while (count<12)
+        {
+            yield return new WaitForSeconds(0.8f);
+            count++;
+            GetComponent<SpriteRenderer>().enabled = !GetComponent<SpriteRenderer>().enabled;
+            GetComponent<TrailRenderer>().enabled = !GetComponent<TrailRenderer>().enabled;
+        }
+        GetComponent<SpriteRenderer>().enabled = true;
+        GetComponent<TrailRenderer>().enabled = true;
+    }
+    IEnumerator deathPW()
+    {
+        death = true;
+        GetComponent<SpriteRenderer>().color = Color.black;
+        trailtx.SetColor("_TintColor",Color.grey);
+        yield return new WaitForSeconds(6);
+
+        trailtx.SetColor("_TintColor", Color.white);       
+        death = false;
     }
    
 }

@@ -21,7 +21,7 @@ GameObject:
   - 4: {fileID: 4000014022834856}
   - 212: {fileID: 212000013984340542}
   - 61: {fileID: 61000012090925958}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Powerup7
   m_TagString: crazyPlayer
   m_Icon: {fileID: 0}

@@ -104,8 +104,8 @@ public class Playermove : MonoBehaviour {
     public IEnumerator crazyplayerpw ()
     {
         crazyPlayer = true;
-        Time.timeScale = 0.7f;
-        yield return new WaitForSeconds(3);
+        Time.timeScale = 0.5f;
+        yield return new WaitForSeconds(4);
         Time.timeScale = 1;
         crazyPlayer = false;
     }
