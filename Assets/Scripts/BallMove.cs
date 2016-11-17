@@ -18,11 +18,19 @@ public class BallMove : MonoBehaviour {
     CameraShakeScript camerashake;
      bool death= false ;
     public static Material trailtx;
+    static bool acelerometre;
+    static bool taptap = false;
+    bool mouseup, touchup = true;     
    	// Use this for initialization
 	void Start ()
     {
-        trailtx = GetComponent<TrailRenderer>().material;
 
+        
+        mouseup = true;
+        touchup = true;
+        taptap = false;
+        trailtx = GetComponent<TrailRenderer>().material;
+        acelerometre = false;
         death = false;
         camerashake = GetComponent<CameraShakeScript>();
         mult = 1;
@@ -41,35 +49,98 @@ public class BallMove : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+    void Update()
+    {
         GetComponent<TrailRenderer>().material = trailtx;
         balls = GameObject.FindGameObjectsWithTag("Ball");
-		       if (teleport)
-               {
-                   randDire = randomDirection(direction);
-                   direction = randDire;
-                   speed = speed >= 8 ? speed : speed += 0.04f;
-                   LookandGO(places[direction].position, speed);
-                   teleport = false;
-					gm.SetScore += mult*1;
-               }
         if (perdeu)
         {
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(0, 0, 0), 2 * Time.deltaTime);
             if (balls.Length == 1)
             {
-                player.SetActive(false);               
+                player.SetActive(false);
 
             }
-            if (Vector3.Distance(transform.position,new Vector3(0,0,0))<=0.05f)
+            if (Vector3.Distance(transform.position, new Vector3(0, 0, 0)) <= 0.05f)
             {
-              GameObject g =  Instantiate(particle,transform.position,Quaternion.identity) as GameObject;
+                GameObject g = Instantiate(particle, transform.position, Quaternion.identity) as GameObject;
                 Destroy(gameObject);
                 Destroy(g, 5);
-               
+
             }
         }
-	}
+        else if (!acelerometre&&!taptap)
+        {
+            if (teleport)
+            {
+                randDire = randomDirection(direction);
+                direction = randDire;
+                speed = speed >= 8 ? speed : speed += 0.04f;
+                LookandGO(places[direction].position, speed);
+                teleport = false;
+                gm.SetScore += mult * 1;
+            }
+          
+        }
+        else if (acelerometre)
+        {
+            float axisx = Input.acceleration.x;
+            float axixy =  Input.acceleration.y;
+            float multi = 2;
+            rb.velocity = new Vector2(axisx * multi * speed, axixy * multi * speed);
+
+        }
+        else if (taptap)
+        {
+            if (Input.touchCount>0&& touchup)
+            {
+                
+                if (Input.GetTouch(0).phase == TouchPhase.Began)
+                {
+                    RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint((Input.GetTouch(0).position)), Vector2.zero);
+                    if ((hit.collider!=null)&& hit.collider.tag == gameObject.tag)
+                    {
+                        if (touchup && mouseup)
+                        {
+                            moveaftertap();
+                            Debug.Log("hey");
+                            touchup = false;
+                        }
+                    }
+                }
+            }
+            
+            else if (Input.GetMouseButton(0))
+            {
+                if (mouseup)
+                {
+                    RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint((Input.mousePosition)), Vector2.zero);
+                    if ((hit.collider != null) && hit.collider.tag == gameObject.tag)
+                    {
+                        if (touchup && touchup)
+                        {
+                            moveaftertap();
+                            mouseup = false;
+                            Debug.Log("he2y");
+                        }
+                    }
+
+                }                
+            }
+            if (Input.touchCount==0)
+            {
+                mouseup = true;               
+            }
+            if (!Input.GetMouseButton(0))
+            {
+                touchup = true;                
+            }
+        }
+      
+       
+      
+      
+    }
     void OnCollisionEnter2D(Collision2D coll)
     {
         if (coll.gameObject.tag == "Player")
@@ -123,9 +194,11 @@ public class BallMove : MonoBehaviour {
             }
             else teleport = true;
         }
+    }
+   
 
         
-    }
+    
     void OnTriggerEnter2D(Collider2D coll)
     {
         if (coll.gameObject.tag =="+ball")
@@ -180,8 +253,36 @@ public class BallMove : MonoBehaviour {
         if (coll.gameObject.tag == "Updown")
         {
             Destroy(coll.gameObject);
-            gm.updonw();
+			StartCoroutine (player.GetComponent<Playermove> ().invertpw ());
+		}
+        if (coll.gameObject.tag == "Acelerometre")
+        {
+            Destroy(coll.gameObject);
+            StartCoroutine(acelerometrepw());
         }
+        if (coll.gameObject.tag == "TapTap")
+        {
+            Destroy(coll.gameObject);
+            StartCoroutine(taptappw());
+        }
+        if (coll.gameObject.tag == "Troll")
+        {
+            Destroy(coll.gameObject);
+            StartCoroutine(TrollPw());
+        }
+        if (coll.gameObject.tag == "Teleport")
+        {
+            Destroy(coll.gameObject);
+            GameObject[] g = GameObject.FindGameObjectsWithTag("PowerUp");
+            transform.position = g[Random.Range(0, g.Length)].transform.position;
+            teleport = true;
+        }
+        if (coll.gameObject.tag == "Minuscle")
+        {
+            Destroy(coll.gameObject);
+            StartCoroutine(minusclepw());
+        }
+        
         
         
     }
@@ -230,6 +331,14 @@ public class BallMove : MonoBehaviour {
 
         }
         }
+    void moveaftertap()
+    {
+        randDire = randomDirection(direction);
+        direction = randDire;
+        speed = speed >= 8 ? speed : speed += 0.04f;
+        LookandGO(places[direction].position, speed);        
+       // gm.SetScore += mult * 1;
+    }
         
      
     
@@ -276,9 +385,9 @@ public class BallMove : MonoBehaviour {
     IEnumerator flash()
     {
         int count =0;
-        while (count<12)
+        while (count<25)
         {
-            yield return new WaitForSeconds(0.8f);
+            yield return new WaitForSeconds(0.4f);
             count++;
             GetComponent<SpriteRenderer>().enabled = !GetComponent<SpriteRenderer>().enabled;
             GetComponent<TrailRenderer>().enabled = !GetComponent<TrailRenderer>().enabled;
@@ -292,9 +401,56 @@ public class BallMove : MonoBehaviour {
         GetComponent<SpriteRenderer>().color = Color.black;
         trailtx.SetColor("_TintColor",Color.grey);
         yield return new WaitForSeconds(6);
-
+        GetComponent<SpriteRenderer>().color = Color.white;
         trailtx.SetColor("_TintColor", Color.white);       
         death = false;
     }
-   
+   IEnumerator acelerometrepw()
+    {
+        acelerometre = true;
+        trailtx.SetColor("_TintColor", Color.green);
+        yield return new WaitForSeconds(8);
+        trailtx.SetColor("_TintColor", Color.white);
+        acelerometre = false;
+        teleport = true;
+    }
+    IEnumerator taptappw()
+   {
+       taptap = true;
+       player.SetActive(false);
+       Time.timeScale = 0.7f;
+       yield return new WaitForSeconds(8);
+       Time.timeScale = 1;
+       player.SetActive(true);
+       taptap = false;
+   }
+    IEnumerator minusclepw()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            transform.localScale *= 1.4f;
+            yield return new WaitForSeconds(3);
+            transform.localScale /= 1.4f;
+            transform.localScale /= 1.4f;
+            yield return new WaitForSeconds(3);
+            transform.localScale *= 1.4f;
+        }
+    }
+        IEnumerator TrollPw()
+    {
+        bool loop = true;
+        int c = 0;
+        trailtx.SetColor("_TintColor", new Color( 61/255f, 245/255f, 210/255f));
+       while (loop)
+       {
+           if (c>6)
+           {
+               loop = false;
+               trailtx.SetColor("_TintColor", Color.white);
+           }
+           c++;
+           teleport = true ;
+             yield return new WaitForSeconds(Mathf.Abs(speed));
+       }
+    }
 }

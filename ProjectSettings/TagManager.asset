@@ -18,6 +18,11 @@ TagManager:
   - death
   - coin
   - Updown
+  - Acelerometre
+  - TapTap
+  - Troll
+  - Teleport
+  - Minuscle
   layers:
   - Default
   - TransparentFX

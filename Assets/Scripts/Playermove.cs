@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 public class Playermove : MonoBehaviour {
 	Animator animator;
-	[SerializeField] private Transform[] Places ;
+	[SerializeField] public Transform[] Places ;
 	int direction=0;
 	private BoxCollider2D coll2d;
 	public bool start;
@@ -11,10 +11,14 @@ public class Playermove : MonoBehaviour {
 	float speed =30;
 	float anglespeed= 720;
     private bool crazyPlayer;
-    
+	public bool invert;
+    [SerializeField]
+    GameObject scoretx;
 	// Use this for initialization
 	void Start () {
+        
         crazyPlayer = false;
+		invert = false;
 		speed = 20;
 		anglespeed = 720;
 		direction = Random.Range (0, 4);
@@ -51,22 +55,31 @@ public class Playermove : MonoBehaviour {
 
 	public void Up()
 	{
-        if (crazyPlayer) direction = Random.Range(0, 4);
+		if (crazyPlayer)
+			direction = Random.Range (0, 4);
+		else if (invert)
+			direction = 1;
         else direction = 0;
 	}
 	public void Down()
 	{
         if (crazyPlayer) direction = Random.Range(0, 4);
+		else if (invert)
+			direction = 0;
         else direction = 1;
 	}
 	public void left()
 	{
         if (crazyPlayer) direction = Random.Range(0, 4);
+		else if (invert)
+			direction =3 ;
         else direction = 2;
 	}
 	public void right()
 	{
         if (crazyPlayer) direction = Random.Range(0, 4);
+		else if (invert)
+			direction = 2;
         else direction = 3;
 	}
 
@@ -109,5 +122,13 @@ public class Playermove : MonoBehaviour {
         Time.timeScale = 1;
         crazyPlayer = false;
     }
+	public IEnumerator invertpw()
+	{
+		invert = true;
+        scoretx.GetComponent<RectTransform>().localScale *= -1;
+		yield return new WaitForSeconds (10f);
+        scoretx.GetComponent<RectTransform>().localScale *= -1;
+		invert = false;
+	}
 }
 
