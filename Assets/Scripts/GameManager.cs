@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     GameObject[] places, limits,ballcount;
     [SerializeField]
-    GameObject coin,GameUIs,pausebt,pauseui;
+    GameObject coin,GameUIs,pausebt,pauseui,gamelose,gameplay;
     [SerializeField]
     Playermove player;
     [HideInInspector] public bool escudo;
@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+
         washighscore = false;
         highscore = PlayerPrefs.HasKey("highscore") ? PlayerPrefs.GetInt("highscore") : 0;
         paused = false;        
@@ -153,14 +154,18 @@ public class GameManager : MonoBehaviour
     public void homebt()
     {
         Application.LoadLevel(Application.loadedLevel);
+
     }
     
      IEnumerator restartGame()
     {
         if (washighscore) { PlayerPrefs.SetInt("highscore", score); }
         yield return new WaitForSeconds(1);
-        if (ballcount.Length == 0)
-            Application.LoadLevel(Application.loadedLevel);
+		if (ballcount.Length == 0){
+          //  Application.LoadLevel(Application.loadedLevel);
+			gamelose.SetActive(true);
+			gameplay.SetActive (false);
+		}
     }
      
     public IEnumerator turnInvisble()
