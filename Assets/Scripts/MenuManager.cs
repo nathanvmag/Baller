@@ -4,12 +4,11 @@ using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour {
 	[SerializeField] GameObject gameUI,Gameobjects,Gametitle,Gameplay,cointx,coin,hightx,Highscorebt,buttons,lobby;
-	float timer= 0;
+	[SerializeField] float animationspeed =10;
+	float timer =0;
 	// Use this for initialization
-	void Start () {
-		timer= 0;
-       
-        
+	void Start () {   
+		timer = 0;
 	}
 	
 	// Update is called once per frame
@@ -38,14 +37,50 @@ public class MenuManager : MonoBehaviour {
 		Gameobjects.SetActive (true);
 		gameObject.SetActive (false);
 	}
+	IEnumerator highscoreanimation()
+	{
+		lobby.SetActive (true);
+		while (Vector3.Distance(lobby.GetComponent<RectTransform> ().position,new Vector3(0,0,0))>0.05f) {
+			//animate (Vector3.left, 5);
+			buttons.GetComponent<RectTransform>().position = Vector3.MoveTowards(buttons.GetComponent<RectTransform>().position,new Vector3(-10,0,0),animationspeed*Time.deltaTime);
+			lobby.GetComponent<RectTransform> ().position = Vector3.MoveTowards (lobby.GetComponent<RectTransform> ().position, new Vector3 (0, 0, 0), animationspeed * Time.deltaTime);
+
+			yield return new WaitForSeconds (Time.deltaTime);		
+		}
+		buttons.SetActive (false);
+
+
+	}
+	IEnumerator backfromhighscore()
+	{
+		buttons.SetActive (true);
+
+			while (Vector3.Distance(buttons.GetComponent<RectTransform>().position,new Vector3(0,0,0))>0.05f)
+			{
+				//animate(Vector3.right,animationspeed);
+				buttons.GetComponent<RectTransform>().position = Vector3.MoveTowards(buttons.GetComponent<RectTransform>().position,new Vector3(0,0,0),animationspeed*Time.deltaTime);
+				lobby.GetComponent<RectTransform>().position-=Vector3.right* -animationspeed *Time.deltaTime;
+				yield return new WaitForSeconds(Time.deltaTime);
+			}
+			lobby.SetActive(false);
+
+	}
 	public void highscorebt()
 	{
-		buttons.SetActive (false);
-		lobby.SetActive (true);
+		StartCoroutine (highscoreanimation ());
 	}
 	public void backmenu()
 	{
-		buttons.SetActive (true);
-		lobby.SetActive (false);
+		StartCoroutine (backfromhighscore ());
 	}
+	void animate(Vector3 dire)
+	{
+		Gametitle.GetComponent<RectTransform> ().position += dire * animationspeed * Time.deltaTime;
+		coin.GetComponent<RectTransform>().position += dire * animationspeed * Time.deltaTime;
+		cointx.GetComponent<RectTransform>().position += dire * animationspeed * Time.deltaTime;
+		Gameplay.GetComponent<RectTransform> ().position += dire * animationspeed * Time.deltaTime;
+		hightx.GetComponent<RectTransform>().position += dire * animationspeed * Time.deltaTime;
+		Highscorebt.GetComponent<RectTransform>().position+=dire * animationspeed * Time.deltaTime;
+	}
+
 }

@@ -23,6 +23,8 @@ TagManager:
   - Troll
   - Teleport
   - Minuscle
+  - Name
+  - Highscore
   layers:
   - Default
   - TransparentFX

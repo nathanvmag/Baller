@@ -74,6 +74,10 @@ public class GameManager : MonoBehaviour
             Coins = 0;
             PlayerPrefs.SetInt("Coins", 0);
          }
+		if (highscore > 1000) {
+			highscore = 0;
+			PlayerPrefs.SetInt ("highscore", highscore);
+		}
         coinstext.text = Coins.ToString();
         if (invisible)
         {
@@ -163,8 +167,8 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1);
 		if (ballcount.Length == 0){
           //  Application.LoadLevel(Application.loadedLevel);
-			gamelose.SetActive(true);
-			gameplay.SetActive (false);
+			StartCoroutine(loseanim());
+
 		}
     }
      
@@ -207,7 +211,16 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1;
         }
     }
-    
+	IEnumerator loseanim()
+	{
+		gamelose.SetActive (true);
+		GameObject.Find ("losescore").GetComponent<Text> ().text = "Score = " + score;
+		while (Vector3.Distance (gamelose.GetComponent<RectTransform> ().position, new Vector3 (0, 0, 0)) > 0.05f) {
+			gamelose.GetComponent<RectTransform> ().position = Vector3.MoveTowards (gamelose.GetComponent<RectTransform> ().position, new Vector3 (0, 0, 0), 10 * Time.deltaTime);
+			yield return new WaitForSeconds (Time.deltaTime);
+		}
+		gameplay.SetActive (false);
+	}
     
 
     public int SetCoins

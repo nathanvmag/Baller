@@ -1,30 +1,67 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 public class GetHighscore : MonoBehaviour {
-
+	public string[,] Dados;
+	public GameObject[] Names,Highscores;
+	[SerializeField] GameObject error,hslobby;
+	WWWForm form;
+	int control;
 	// Use this for initialization
 	void Start () {
-		StartCoroutine (site ("http://stormide.pe.hu/teste.php"));
+		 form = new WWWForm ();
+		control = 0;
+		form.AddField ("serviceid", "392");
+		StartCoroutine (site ("http://stormide.pe.hu/services.php"));
+		Names = GameObject.FindGameObjectsWithTag ("Name");
+		Highscores = GameObject.FindGameObjectsWithTag ("Highscore");
+		foreach (GameObject g in Names) {
+			g.name = "Nome" + (control).ToString();
+			control++;
+		}
+		control = 0;
+		foreach (GameObject g in Highscores) {
+			g.name = "Highscore" + ( control).ToString();
+			control++;
+		}
+
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
+	public void reconect()
+	{
+		StartCoroutine (site ("http://stormide.pe.hu/services.php"));
+		hslobby.SetActive (true);
+	}
 
 	IEnumerator site(string url) {
-		WWW www = new WWW(url);
+		WWW www = new WWW(url,form);
 		yield return www;
-		if (www.text != "") {
+        Debug.Log(www.text);
+		if (www.text != "") {			
 			List<string> first = new List<string> ();
-			first.AddRange (www.text.Split (' '));
-			foreach (string s in first) {
-				Debug.Log (s.Length);
+			first.AddRange (www.text.Split (' '));	
+			Dados = new string[first.Count - 1, 2];
+			for (int i = 0; i < first.Count - 1; i++) {
+				string[] split = first [i].Split ('|');
+				Dados [i, 0] = split [0];
+				Dados [i, 1] = split [1];
 			}
-			Debug.Log ("correto");
+			for (int i = 0; i < Dados.GetLength (0); i++) {
+				GameObject.Find ("Nome" + i).GetComponent<Text> ().text = Dados [i, 0];
+				GameObject.Find ("Highscore" + i).GetComponent<Text> ().text = Dados [i, 1];
+			}
+			error.SetActive (false);
+		} else {
+			
+			error.SetActive (true);
+			hslobby.SetActive (false);
 		}
-		else 
-		Debug.Log ("Error ao conectar");
+
 	}
 }
