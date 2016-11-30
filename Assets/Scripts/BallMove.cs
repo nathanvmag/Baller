@@ -248,7 +248,7 @@ public class BallMove : MonoBehaviour {
         if (coll.gameObject.tag == "coin")
         {
             Destroy(coll.gameObject);
-            gm.SetCoins++;
+			gm.SetCoins++;
         }
         if (coll.gameObject.tag == "Updown")
         {

@@ -25,6 +25,7 @@ TagManager:
   - Minuscle
   - Name
   - Highscore
+  - indice
   layers:
   - Default
   - TransparentFX

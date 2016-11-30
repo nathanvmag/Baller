@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour {
-	[SerializeField] GameObject gameUI,Gameobjects,Gametitle,Gameplay,cointx,coin,hightx,Highscorebt,buttons,lobby;
+	[SerializeField] GameObject gameUI,Gameobjects,Gametitle,Gameplay,cointx,coin,hightx,Highscorebt,buttons,lobby,store,storeBt;
 	[SerializeField] float animationspeed =10;
 	float timer =0;
 	// Use this for initialization
@@ -30,6 +30,7 @@ public class MenuManager : MonoBehaviour {
 			Gameplay.GetComponent<RectTransform> ().position += Vector3.up * -5 * Time.deltaTime;
             hightx.GetComponent<RectTransform>().position += Vector3.up * -2 * Time.deltaTime;
 			Highscorebt.GetComponent<RectTransform>().position+=Vector3.up * -4 * Time.deltaTime;
+			storeBt.GetComponent<RectTransform>().position+=Vector3.up * -4 * Time.deltaTime;
 			timer += Time.deltaTime;
 			yield return new WaitForSeconds (Time.deltaTime);
         } yield return new WaitForSeconds(0.2f);
@@ -72,6 +73,16 @@ public class MenuManager : MonoBehaviour {
 	public void backmenu()
 	{
 		StartCoroutine (backfromhighscore ());
+	}
+	public void storebt()
+	{
+		buttons.SetActive (false);
+		store.SetActive (true);
+	}
+	public void backstoretomenu()
+	{
+		buttons.SetActive (true);
+		store.SetActive (false);
 	}
 	void animate(Vector3 dire)
 	{

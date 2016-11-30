@@ -92,7 +92,7 @@ public class Playermove : MonoBehaviour {
 	}
 	IEnumerator waitBall ()
 	{
-		GameObject ball = Resources.Load ("Prefab/Ball") as GameObject;
+		GameObject ball = Resources.Load ("Prefab/Game/Ball"+PlayerPrefs.GetInt("SelectedBall")) as GameObject;
 		yield return new WaitForSeconds (1);
 		bola =Instantiate (ball, new Vector3 (0, 0,0),Quaternion.identity) as GameObject;
 		bola.GetComponent<BallMove> ().direction = direction;
