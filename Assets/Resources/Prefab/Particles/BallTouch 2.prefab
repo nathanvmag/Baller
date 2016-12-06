@@ -22,7 +22,7 @@ GameObject:
   - 198: {fileID: 198000010649344408}
   - 199: {fileID: 199000011194371644}
   m_Layer: 0
-  m_Name: BallTouch
+  m_Name: BallTouch 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1797,7 +1797,7 @@ ParticleSystemRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 2100000, guid: 89912d88ecb412147ac5ea7af50c491e, type: 2}
+  - {fileID: 2100000, guid: 243a63c06e6484b8cb0f9354a3676eef, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
@@ -1811,8 +1811,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 931751901
+  m_SortingOrder: 2
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0

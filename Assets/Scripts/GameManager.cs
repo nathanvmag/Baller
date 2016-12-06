@@ -10,23 +10,35 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     GameObject[] places, limits,ballcount;
     [SerializeField]
-    GameObject coin,GameUIs,pausebt,pauseui,gamelose,gameplay;
+    GameObject coin,GameUIs,pausebt,pauseui,gamelose,gameplay,Diamondprefab;
     [SerializeField]
     Playermove player;
     [HideInInspector] public bool escudo;
     [SerializeField] Sprite shieldImg;
     private int  score;
-	[SerializeField] private Text scoretx,coinstext,highscoretx;
+	[SerializeField] private Text scoretx,coinstext,highscoretx,diamondsTx,price;
     private bool invisible;
     int control;
     bool find;
     static bool paused;
     private int highscore ;
     bool washighscore = false;
+	Vector3 losegameposition;
+	public static bool playagain;
+	private int diamonds;
+	int RevivePrice;
     // Use this for initialization
     void Start()
     {
-
+		
+		RevivePrice = 1;
+		if (!PlayerPrefs.HasKey ("Diamonds")) {
+			PlayerPrefs.SetInt ("Diamonds",5);
+		}
+		diamonds = PlayerPrefs.GetInt ("Diamonds");
+		PlayerPrefs.DeleteKey ("OldSpeed");
+		playagain = false;
+		losegameposition = gamelose.GetComponent<RectTransform> ().position;
         washighscore = false;
         highscore = PlayerPrefs.HasKey("highscore") ? PlayerPrefs.GetInt("highscore") : 0;
         paused = false;        
@@ -56,34 +68,42 @@ public class GameManager : MonoBehaviour
         {
             g.GetComponent<SpriteRenderer>().sprite = null;           
         }
-       
+		//SetDiamonds = 20;
     }
 
     // Update is called once per frame
     void Update()
-    {        
+	{   
+		
+		if ((GameUIs.activeSelf) && player == null) {
+			player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Playermove> ();
+		}
         if (score>highscore)
         {
             washighscore = true;
             //PlayerPrefs.SetInt("highscore", score);
         }
-        highscoretx.text = "Best: " +highscore.ToString();
+        highscoretx.text = "Best " +highscore.ToString();
         PlayerPrefs.SetInt("Coins", Coins);
         if (Coins>9999)
         {
             Coins = 0;
             PlayerPrefs.SetInt("Coins", 0);
          }
+		diamondsTx.text = PlayerPrefs.GetInt ("Diamonds").ToString();
+		if (diamonds != PlayerPrefs.GetInt ("Diamonds")) {
+			PlayerPrefs.SetInt ("Diamonds", diamonds);
+		}
 		if (highscore > 1000) {
 			highscore = 0;
 			PlayerPrefs.SetInt ("highscore", highscore);
 		}
         coinstext.text = Coins.ToString();
-        if (invisible)
+		if (invisible && player !=null)
         {
             player.GetComponent<SpriteRenderer>().enabled = false;
         }
-        else player.GetComponent<SpriteRenderer>().enabled = true;
+		else if (player !=null)player.GetComponent<SpriteRenderer>().enabled = true;
         ballcount = GameObject.FindGameObjectsWithTag("Ball");
         scoretx.text = score.ToString();
         if (escudo )
@@ -102,10 +122,16 @@ public class GameManager : MonoBehaviour
             }
 
         }
-        if (ballcount.Length==0&& player.start)
+		if ( (GameUIs.activeSelf)&& ballcount.Length==0&& player.start&&!playagain )
         {
+			
             StartCoroutine(restartGame());
+			playagain = true;
+
         }
+
+
+
 
     } 
 
@@ -138,6 +164,11 @@ public class GameManager : MonoBehaviour
             GameObject c = Instantiate(coin, places[Random.Range(0, places.Length)].transform.position, Quaternion.identity) as GameObject;
             Destroy(c, 8);
         }
+		if (rand > 7.1 && rand < 7.3) {
+			places = GameObject.FindGameObjectsWithTag("PowerUp");
+			GameObject d = Instantiate(Diamondprefab,places[Random.Range(0, places.Length)].transform.position, Quaternion.identity) as GameObject;
+			Destroy (d, 5);
+		}
     }
     public IEnumerator SpeedUpPw()
     {
@@ -158,6 +189,7 @@ public class GameManager : MonoBehaviour
     public void homebt()
     {
         Application.LoadLevel(Application.loadedLevel);
+		PlayerPrefs.DeleteKey ("OldSpeed");
 
     }
     
@@ -214,12 +246,34 @@ public class GameManager : MonoBehaviour
 	IEnumerator loseanim()
 	{
 		gamelose.SetActive (true);
+		price.text = RevivePrice.ToString ()+"x";
 		GameObject.Find ("losescore").GetComponent<Text> ().text = "Score = " + score;
 		while (Vector3.Distance (gamelose.GetComponent<RectTransform> ().position, new Vector3 (0, 0, 0)) > 0.05f) {
-			gamelose.GetComponent<RectTransform> ().position = Vector3.MoveTowards (gamelose.GetComponent<RectTransform> ().position, new Vector3 (0, 0, 0), 10 * Time.deltaTime);
+			gamelose.GetComponent<RectTransform> ().position = Vector3.MoveTowards (gamelose.GetComponent<RectTransform> ().position, new Vector3 (0, 0, 0), 20 * Time.deltaTime);
 			yield return new WaitForSeconds (Time.deltaTime);
 		}
+		playagain = true;
 		gameplay.SetActive (false);
+	}
+	public void PlayAgain()
+	{
+		if (diamonds >= RevivePrice) {
+			playagain = true;
+			StartCoroutine (playAgain ());
+		}
+	}
+	IEnumerator playAgain()
+	{
+		
+		while (Vector3.Distance (gamelose.GetComponent<RectTransform> ().position, losegameposition) > 0.05f) {
+			gamelose.GetComponent<RectTransform> ().position = Vector3.MoveTowards (gamelose.GetComponent<RectTransform> ().position,losegameposition, 20 * Time.deltaTime);
+			yield return new WaitForSeconds (Time.deltaTime);
+		}
+		gamelose.SetActive (false);
+		gameplay.SetActive (true);
+		player.gameObject.SetActive (true);
+		SetDiamonds-=RevivePrice;
+		RevivePrice = RevivePrice == 1 ? 2 : RevivePrice*2;
 	}
     
 
@@ -232,7 +286,31 @@ public class GameManager : MonoBehaviour
         }
 
     } 
+	public int SetDiamonds
+	{
+		get { return diamonds; }
+		set
+		{           
+			diamonds = value;           
+		}
 
+	} 
+	public void up()
+	{
+		player.Up ();
+	}
+	public void down()
+	{
+		player.Down ();
+	}
+	public void left()
+	{
+		player.left ();
+	}
+	public void right()
+	{
+		player.right ();
+	}
     
     
 }

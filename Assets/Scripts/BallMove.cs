@@ -11,7 +11,7 @@ public class BallMove : MonoBehaviour {
     int randDire;
     public float offset;
     private bool teleport;    
-	[SerializeField] GameObject particle;    
+	public GameObject particle;    
     GameObject[] balls;
     GameManager gm;
     static int mult;
@@ -25,7 +25,7 @@ public class BallMove : MonoBehaviour {
 	void Start ()
     {
 
-        
+		particle = Resources.Load ("Prefab/Particles/ballparticle " + PlayerPrefs.GetInt ("SelectedBall").ToString())as GameObject;
         mouseup = true;
         touchup = true;
         taptap = false;
@@ -43,8 +43,8 @@ public class BallMove : MonoBehaviour {
 		places [1] = GameObject.Find ("PlaceDown").transform;
 		places [2] = GameObject.Find ("PlaceLeft").transform;
 		places [3] = GameObject.Find ("PlaceRight").transform;
-		player = GameObject.Find ("Player");
-        Balltouch = Resources.Load("Prefab/Particles/BallTouch") as GameObject;
+		player = GameObject.FindGameObjectWithTag("Player");
+		Balltouch = Resources.Load("Prefab/Particles/BallTouch "+PlayerPrefs.GetInt("SelectedBall").ToString()) as GameObject;
         LookandGO(places[direction].position, speed);      
 	}
 	
@@ -66,6 +66,7 @@ public class BallMove : MonoBehaviour {
                 GameObject g = Instantiate(particle, transform.position, Quaternion.identity) as GameObject;
                 Destroy(gameObject);
                 Destroy(g, 5);
+				PlayerPrefs.SetFloat ("OldSpeed", speed);
 
             }
         }
@@ -165,6 +166,7 @@ public class BallMove : MonoBehaviour {
                         break;
                 }
                 camerashake.Shake();
+				Camera.main.GetComponent<Shake> ().shakeDuration = 0.1f;
                 GameObject g = Instantiate(Balltouch, transform.position, coll.transform.rotation) as GameObject;
 
                 Destroy(g, 1);
@@ -282,6 +284,20 @@ public class BallMove : MonoBehaviour {
             Destroy(coll.gameObject);
             StartCoroutine(minusclepw());
         }
+		if (coll.gameObject.tag == "30coin")
+		{
+			Destroy(coll.gameObject);
+			gm.SetCoins += 30;
+		}
+		if (coll.gameObject.tag == "Terremote")
+		{
+			Destroy(coll.gameObject);
+			Camera.main.GetComponent<Shake> ().shakeDuration = 12;
+		}
+		if (coll.gameObject.tag == "Diamond") {
+			Destroy(coll.gameObject);
+			gm.SetDiamonds++;
+		}
         
         
         
