@@ -14,9 +14,17 @@ public class Playermove : MonoBehaviour {
 	public bool invert;
     [SerializeField]
     GameObject scoretx;
+    public GameObject[] controls;
+    string s = "Swipe or touch to move the player";
+    string u = "Do not let the ball leave the screen";
+    public bool starttutorial = false;
+    [SerializeField]
+    Sprite[] sprites;
 	// Use this for initialization
 	void Start () {
-        
+       
+        starttutorial = PlayerPrefs.GetInt("TutorialTimes") > 1 ? false : true;
+        Debug.Log(PlayerPrefs.GetInt("TutorialTimes"));
         crazyPlayer = false;
 		invert = false;
 		speed = 20;
@@ -25,7 +33,11 @@ public class Playermove : MonoBehaviour {
 		animator = GetComponent<Animator> ();
 		coll2d = GetComponent<BoxCollider2D> ();
 		Places = GameObject.FindGameObjectsWithTag ("Places");
-
+        controls = GameObject.FindGameObjectsWithTag("Controls");
+        if (starttutorial)
+        {
+            StartCoroutine(tutorial());
+        }
 	}
 	
 	// Update is called once per frame
@@ -46,12 +58,47 @@ public class Playermove : MonoBehaviour {
 			}
 			if (Input.GetKeyDown (KeyCode.UpArrow))
 				Up ();
-			if (Input.GetKeyDown (KeyCode.LeftArrow))
+			 if (Input.GetKeyDown (KeyCode.LeftArrow))
 				left ();
-			if (Input.GetKeyDown (KeyCode.RightArrow))
+			 if (Input.GetKeyDown (KeyCode.RightArrow))
 				right ();
 			if (Input.GetKeyDown (KeyCode.DownArrow))
-				Down ();			
+				Down ();
+            if (Input.touchCount > 0)
+            {
+                if (Input.GetTouch(0).phase == TouchPhase.Moved)
+                {
+                    controlinput(false);
+                }
+            }
+		
+            if (touchV2.esq)
+            {
+                controlinput(false);
+                left();
+                touchV2.esq = false;
+            }
+            else if (touchV2.dir)
+            {
+                controlinput(false);
+                right();
+                touchV2.dir = false;
+            }
+            else if (touchV2.cima)
+            {
+                controlinput(false);
+                Up();
+                touchV2.cima = false;
+            }
+            else if (touchV2.baixo)
+            {
+                controlinput(false);
+                Down();
+                touchV2.baixo = false;
+            }
+            else if (touchV2.salvarposi) {
+                controlinput(true);
+            }
 		}
 	}
 
@@ -83,7 +130,7 @@ public class Playermove : MonoBehaviour {
 		else if (invert)
 			direction = 2;
         else direction = 3;
-		Debug.Log ("Aqui");
+
 	}
 
 	public void startgame()
@@ -95,6 +142,10 @@ public class Playermove : MonoBehaviour {
 	}
 	IEnumerator waitBall ()
 	{
+        while (starttutorial)
+        {
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
 		GameObject ball = Resources.Load ("Prefab/Game/Ball"+PlayerPrefs.GetInt("SelectedBall")) as GameObject;
 		if (PlayerPrefs.HasKey ("OldSpeed")) {		
 			
@@ -126,6 +177,40 @@ public class Playermove : MonoBehaviour {
 		} else
 			return rand;
 	}
+    IEnumerator tutorial()
+    {
+       
+        GameObject g = GameObject.FindGameObjectWithTag("Tutorial");
+        g.GetComponent<Text>().text = s;
+        StartCoroutine(flashing());
+        yield return new WaitForSeconds(7);
+        g.GetComponent<Text>().text = u;
+        yield return new WaitForSeconds(1.5f);
+        starttutorial = false;
+        PlayerPrefs.SetInt("TutorialTimes", PlayerPrefs.GetInt("TutorialTimes") + 1);
+        yield return new WaitForSeconds(2);
+        g.GetComponent<Text>().text = "";
+    } 
+    IEnumerator flashing()
+    {
+        while (starttutorial)
+        {
+            foreach (GameObject item in controls)
+            {
+                item.GetComponent<Image>().sprite = sprites[1];
+                item.GetComponent<Image>().color = new Color(item.GetComponent<Image>().color.r, item.GetComponent<Image>().color.b, item.GetComponent<Image>().color.g, Mathf.PingPong(Time.time/2, 0.6f));
+
+            }
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+        foreach (GameObject item in controls)
+        {
+            item.GetComponent<Image>().sprite = sprites[0];
+            item.GetComponent<Image>().color = new Color(item.GetComponent<Image>().color.r, item.GetComponent<Image>().color.b, item.GetComponent<Image>().color.g,1);
+        }
+
+       
+    }
     public IEnumerator crazyplayerpw ()
     {
         crazyPlayer = true;
@@ -142,5 +227,13 @@ public class Playermove : MonoBehaviour {
         scoretx.GetComponent<RectTransform>().localScale *= -1;
 		invert = false;
 	}
+    void controlinput(bool value)
+    {
+        foreach (GameObject item in controls)
+        {
+            item.SetActive(value);
+    
+        }
+    }
 }
 

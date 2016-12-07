@@ -12,7 +12,7 @@ public class Store : MonoBehaviour {
 	public List<GameObject>Playerstosell;
 	public List<int>Myplayers;
 	[SerializeField]Sprite diamond,coin;
-
+	public int ballindice,playerindice;
 
 	// Use this for initialization
 	void Start () {	
@@ -122,6 +122,10 @@ public class Store : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+        ballindice = Mathf.Abs(Mathf.RoundToInt(Mathf.Round(controller.GetComponent<RectTransform>().localPosition.x / 870)));
+		playerindice =Mathf.Abs( Mathf.RoundToInt( Mathf.Round( controller2.GetComponent<RectTransform> ().localPosition.x / 870)));
+		
 		coinstx.GetComponent<Text> ().text = PlayerPrefs.GetInt ("Coins").ToString ();		
 		diamondtx.GetComponent<Text> ().text = PlayerPrefs.GetInt ("Diamonds").ToString ();
 		if (touchV2.dir) {
@@ -146,24 +150,27 @@ public class Store : MonoBehaviour {
 	}
 	public void Left()
 	{
-		if (controller.GetComponent<RectTransform> ().localPosition.x <-100) {
+		if (ballindice!=0) {
 			controller.GetComponent<RectTransform> ().localPosition =new Vector2(controller.GetComponent<RectTransform> ().localPosition.x+ 870,controller.GetComponent<RectTransform> ().localPosition.y);
 		}
 	}
 	public void Right()
 	{
+		if (ballindice!=controller.transform.childCount-1){
 		controller.GetComponent<RectTransform> ().localPosition = new Vector2 (controller.GetComponent<RectTransform> ().localPosition.x - 870, controller.GetComponent<RectTransform> ().localPosition.y);
 	}
-
+	}
 	public void Left2()
 	{
-		if (controller2.GetComponent<RectTransform> ().localPosition.x <-100) {
+		if (playerindice!=0) {
 			controller2.GetComponent<RectTransform> ().localPosition =new Vector2(controller2.GetComponent<RectTransform> ().localPosition.x+ 870,controller2.GetComponent<RectTransform> ().localPosition.y);
 		}
 	}
 	public void Right2()
 	{
-		controller2.GetComponent<RectTransform> ().localPosition = new Vector2 (controller2.GetComponent<RectTransform> ().localPosition.x - 870, controller2.GetComponent<RectTransform> ().localPosition.y);
+		if (playerindice != controller2.transform.childCount - 1) {
+			controller2.GetComponent<RectTransform> ().localPosition = new Vector2 (controller2.GetComponent<RectTransform> ().localPosition.x - 870, controller2.GetComponent<RectTransform> ().localPosition.y);
+		}
 	}
 	public void BuyBt()
 	{

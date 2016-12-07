@@ -197,7 +197,7 @@ public class GameManager : MonoBehaviour
     {
         if (washighscore) { PlayerPrefs.SetInt("highscore", score); }
         yield return new WaitForSeconds(1);
-		if (ballcount.Length == 0){
+		if (ballcount.Length == 0&& !player.starttutorial){
           //  Application.LoadLevel(Application.loadedLevel);
 			StartCoroutine(loseanim());
 
@@ -297,18 +297,26 @@ public class GameManager : MonoBehaviour
 	} 
 	public void up()
 	{
+        if (touchV2.cima || touchV2.baixo || touchV2.esq || touchV2.dir) { }
+        else       
 		player.Up ();
 	}
 	public void down()
 	{
+        if (touchV2.cima || touchV2.baixo || touchV2.esq || touchV2.dir) { }
+        else 
 		player.Down ();
 	}
 	public void left()
 	{
+        if (touchV2.cima || touchV2.baixo || touchV2.esq || touchV2.dir) { }
+        else 
 		player.left ();
 	}
 	public void right()
 	{
+        if (touchV2.cima || touchV2.baixo || touchV2.esq || touchV2.dir) { }
+        else 
 		player.right ();
 	}
     

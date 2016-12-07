@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class touchV2 : MonoBehaviour {
-    bool salvarposi,esperar;
+    public static bool salvarposi,esperar;
     public static bool esq, dir, cima, baixo, aperto;
     float posix, posiy;
     float timer; 

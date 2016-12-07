@@ -30,6 +30,8 @@ TagManager:
   - Terremote
   - Places
   - Diamond
+  - Controls
+  - Tutorial
   layers:
   - Default
   - TransparentFX

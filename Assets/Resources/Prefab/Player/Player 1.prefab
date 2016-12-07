@@ -125,6 +125,11 @@ MonoBehaviour:
   start: 0
   invert: 0
   scoretx: {fileID: 0}
+  controls: []
+  starttutorial: 0
+  sprites:
+  - {fileID: 21300000, guid: a8386f8074671454597bedf5aebc05d3, type: 3}
+  - {fileID: 21300000, guid: 58f66feab9a19f54599c1e69c4e5197b, type: 3}
 --- !u!212 &212000010065425898
 SpriteRenderer:
   m_ObjectHideFlags: 1
