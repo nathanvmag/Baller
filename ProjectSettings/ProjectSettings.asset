@@ -164,8 +164,8 @@ PlayerSettings:
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: 
-  AndroidKeyaliasName: 
+  AndroidKeystoreName: D:/Users/nathanmagalhaes/Documents/KeysStores.keystore
+  AndroidKeyaliasName: baller
   AndroidTVCompatibility: 0
   AndroidIsGame: 0
   androidEnableBanner: 1
@@ -473,7 +473,7 @@ PlayerSettings:
   Game_Performance_ServiceEnabled::Game_Performance_ServiceEnabled: False
   Hub_ServiceEnabled::Hub_ServiceEnabled: False
   Purchasing_ServiceEnabled::Purchasing_ServiceEnabled: False
-  UNet_ServiceEnabled::UNet_ServiceEnabled: False
+  UNet_ServiceEnabled::UNet_ServiceEnabled: True
   Unity_Ads_ServiceEnabled::Unity_Ads_ServiceEnabled: False
   vectorPropertyNames:
   - Android::VR::enabledDevices
@@ -513,7 +513,7 @@ PlayerSettings:
   XboxOne::VR::enabledDevices: []
   iOS::VR::enabledDevices: []
   tvOS::VR::enabledDevices: []
-  cloudProjectId: 2c261eee-6e93-431b-bfd1-dddeed8b9445
-  projectName: Baller
+  cloudProjectId: 8a0f7776-ce14-49ae-802e-d2c81b01b7c9
+  projectName: Baller (1)
   organizationId: nathan-vieira
   cloudEnabled: 0

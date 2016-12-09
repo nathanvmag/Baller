@@ -32,6 +32,7 @@ TagManager:
   - Diamond
   - Controls
   - Tutorial
+  - sTx
   layers:
   - Default
   - TransparentFX

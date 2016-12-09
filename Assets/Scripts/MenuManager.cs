@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour {
-	[SerializeField] GameObject gameUI,Gameobjects,Gametitle,Gameplay,cointx,coin,hightx,Highscorebt,buttons,lobby,store,storeBt,diamond,diamondtx;
+	[SerializeField] GameObject gameUI,Gameobjects,Gametitle,Gameplay,cointx,coin,hightx,Highscorebt,buttons,lobby,store,storeBt,diamond,diamondtx,buydiabt,buydiamonds;
 	[SerializeField] float animationspeed =10;
 	float timer =0;
 	// Use this for initialization
@@ -109,6 +109,16 @@ public class MenuManager : MonoBehaviour {
 	{
 		StartCoroutine (backfromStore ());
 	}
+    public void buydiamond()
+    {
+        buydiamonds.SetActive(true);
+        buttons.SetActive(false);
+    }
+    public void backbuyditomenu()
+    {
+        buydiamonds.SetActive(false);
+        buttons.SetActive(true);
+    }
 	void animate(Vector3 dire)
 	{
 		Gametitle.GetComponent<RectTransform> ().position += dire * animationspeed * Time.deltaTime;

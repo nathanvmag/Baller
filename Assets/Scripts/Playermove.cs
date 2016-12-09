@@ -22,6 +22,7 @@ public class Playermove : MonoBehaviour {
     Sprite[] sprites;
 	// Use this for initialization
 	void Start () {
+        scoretx = GameObject.FindGameObjectWithTag("sTx");
        
         starttutorial = PlayerPrefs.GetInt("TutorialTimes") > 1 ? false : true;
         Debug.Log(PlayerPrefs.GetInt("TutorialTimes"));
