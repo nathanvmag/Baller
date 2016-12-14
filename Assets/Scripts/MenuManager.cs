@@ -119,6 +119,10 @@ public class MenuManager : MonoBehaviour {
         buydiamonds.SetActive(false);
         buttons.SetActive(true);
     }
+    public void buyMorediamonds()
+    {
+        StartCoroutine(buyMoreDiamonds());
+    }
 	void animate(Vector3 dire)
 	{
 		Gametitle.GetComponent<RectTransform> ().position += dire * animationspeed * Time.deltaTime;
@@ -129,4 +133,17 @@ public class MenuManager : MonoBehaviour {
 		Highscorebt.GetComponent<RectTransform>().position+=dire * animationspeed * Time.deltaTime;
 	}
 
+    IEnumerator buyMoreDiamonds()
+    {
+        buttons.SetActive(true);
+        while (Vector3.Distance(buttons.GetComponent<RectTransform>().position, new Vector3(0, 0, 0)) > 0.05f)
+        {
+            store.GetComponent<RectTransform>().position -= Vector3.up * animationspeed *2* Time.deltaTime;
+            buttons.GetComponent<RectTransform>().position = Vector3.MoveTowards(buttons.GetComponent<RectTransform>().position, new Vector3(0, 0, 0), animationspeed*2 * Time.deltaTime);
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+        store.SetActive(false);
+        buydiamond();
+
+    }
 }

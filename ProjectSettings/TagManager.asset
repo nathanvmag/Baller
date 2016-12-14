@@ -33,6 +33,7 @@ TagManager:
   - Controls
   - Tutorial
   - sTx
+  - MenuManager
   layers:
   - Default
   - TransparentFX

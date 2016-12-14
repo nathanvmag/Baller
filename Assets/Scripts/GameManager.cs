@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour
         }
         highscoretx.text = "Best " +highscore.ToString();
         PlayerPrefs.SetInt("Coins", Coins);
-        if (Coins>9999)
+        if (Coins>15000)
         {
             Coins = 0;
             PlayerPrefs.SetInt("Coins", 0);

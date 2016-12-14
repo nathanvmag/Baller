@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 public class Store : MonoBehaviour {
 	int counter =0;
-	[SerializeField]GameObject controller,controller2,coinstx,Ballstore,Playerstore,openball,openplayer,diamondtx;
+	[SerializeField]GameObject controller,controller2,coinstx,Ballstore,Playerstore,openball,openplayer,diamondtx,noCash,buycashWithDiamond,btcashfordiamond;
 	[SerializeField]GameManager gm;
 	public List<GameObject> Ballstosell;
 	public List<int> Myballs;
@@ -174,19 +174,23 @@ public class Store : MonoBehaviour {
 	}
 	public void BuyBt()
 	{
-		if (EventSystem.current.currentSelectedGameObject.transform.FindChild ("Image").gameObject.GetComponent<Image> ().sprite == coin) { 
-			if (int.Parse (EventSystem.current.currentSelectedGameObject.transform.FindChild ("Value").gameObject.GetComponent<Text> ().text) <= PlayerPrefs.GetInt ("Coins")) {
-				int temp = PlayerPrefs.GetInt ("Coins") - int.Parse (EventSystem.current.currentSelectedGameObject.transform.FindChild ("Value").gameObject.GetComponent<Text> ().text);
-				PlayerPrefs.SetInt ("Coins", temp);
-				gm.SetCoins = temp;
-				int indice = int.Parse (EventSystem.current.currentSelectedGameObject.transform.parent.gameObject.name.Substring (5, 1));
-				PlayerPrefs.SetInt ("BuyBall" + indice, 1);
-				PlayerPrefs.SetInt ("SelectedBall", indice);
-				UpdateStatus ();
-			
+		if (EventSystem.current.currentSelectedGameObject.transform.FindChild ("Image").gameObject.GetComponent<Image> ().sprite == coin) {
+            if (int.Parse(EventSystem.current.currentSelectedGameObject.transform.FindChild("Value").gameObject.GetComponent<Text>().text) <= PlayerPrefs.GetInt("Coins"))
+            {
+                int temp = PlayerPrefs.GetInt("Coins") - int.Parse(EventSystem.current.currentSelectedGameObject.transform.FindChild("Value").gameObject.GetComponent<Text>().text);
+                PlayerPrefs.SetInt("Coins", temp);
+                gm.SetCoins = temp;
+                int indice = int.Parse(EventSystem.current.currentSelectedGameObject.transform.parent.gameObject.name.Substring(5, 1));
+                PlayerPrefs.SetInt("BuyBall" + indice, 1);
+                PlayerPrefs.SetInt("SelectedBall", indice);
+                UpdateStatus();
 
-			} else
-				Debug.Log ("sem dinheiro");		
+
+            }
+            else
+            {
+                noCash.SetActive(true);
+            }		
 		}
 
 		else if (EventSystem.current.currentSelectedGameObject.transform.FindChild ("Image").gameObject.GetComponent<Image> ().sprite == diamond) {
@@ -200,8 +204,10 @@ public class Store : MonoBehaviour {
 				UpdateStatus ();
 
 
-			} else
-				Debug.Log ("sem diamante");		
+            }else 
+            {
+                noCash.SetActive(true);
+            }
 		}
 
 
@@ -249,16 +255,73 @@ public class Store : MonoBehaviour {
 	{
 		Ballstore.SetActive (true);
 		Playerstore.SetActive (false);
+        buycashWithDiamond.SetActive(false);
 		openball.GetComponent<Image> ().color = Color.cyan;
 		openplayer.GetComponent<Image> ().color = Color.white;
+        btcashfordiamond.GetComponent<Image>().color = Color.white;
 	}
 	public void OpenPlayerStore()
 	{
+        buycashWithDiamond.SetActive(false);
 		Ballstore.SetActive (false);
 		Playerstore.SetActive (true);
 		openball.GetComponent<Image> ().color = Color.white;
 		openplayer.GetComponent<Image> ().color = Color.cyan;
+        btcashfordiamond.GetComponent<Image>().color = Color.white;
 	}
+    public void OpenCashWithDiamond()
+    {
+        buycashWithDiamond.SetActive(true);
+        Ballstore.SetActive(false);
+        Playerstore.SetActive(false);
+        openball.GetComponent<Image>().color = Color.white;
+        openplayer.GetComponent<Image>().color = Color.white;
+        btcashfordiamond.GetComponent<Image>().color = Color.cyan;
+    }
+    public void BuyCashWithDiamonds()
+    {   int price= 0;
+        int WinCoin = 0;
+    int indice = int.Parse(EventSystem.current.currentSelectedGameObject.transform.parent.gameObject.name.Substring(5, 1));
+        switch (indice)
+        {
+            case 0:                 
+                price= 20;
+                WinCoin = 50;
+                break;
+                 case 1:                 
+                price= 100;
+                WinCoin = 200;
+                break;
+                 case 2:                 
+                price= 150;
+                WinCoin = 500;
+                break;
+                 case 3:
+                WinCoin = 1000;
+                price= 300;
+                break;
+                 case 4:
+                WinCoin = 2500;
+                price= 500;
+                break;
+                 case 5:                 
+                price= 700;
+                WinCoin = 3500;
+                break;
+                 case 6:
+                price = 1000;
+                WinCoin = 5000;
+                break;    
+        }
+        Debug.Log(price);
+        if (price <= PlayerPrefs.GetInt("Diamonds"))
+        {
+           
+            gm.SetCoins +=  WinCoin;
+            gm.SetDiamonds -= price;
+        }
+        else noCash.SetActive(true);
+    }
 
 	public void UpdateStatus()
 	{
@@ -323,5 +386,13 @@ public class Store : MonoBehaviour {
 		}
 
 	}
+    public void closeNoCash()
+    {
+        noCash.SetActive(false);
+    }public void buyMore()
+    {
+        noCash.SetActive(false);
+        GameObject.FindGameObjectWithTag("MenuManager").GetComponent<MenuManager>().buyMorediamonds();
+    }
 
 }
