@@ -33,6 +33,7 @@ public class MenuManager : MonoBehaviour {
             hightx.GetComponent<RectTransform>().position += Vector3.up * 5 * Time.deltaTime;
 			Highscorebt.GetComponent<RectTransform>().position+=Vector3.up * -4 * Time.deltaTime;
 			storeBt.GetComponent<RectTransform>().position+=Vector3.up * -4 * Time.deltaTime;
+            buydiabt.GetComponent<RectTransform>().position += Vector3.up * -4 * Time.deltaTime;
 			timer += Time.deltaTime;
 			yield return new WaitForSeconds (Time.deltaTime);
         } yield return new WaitForSeconds(0.2f);

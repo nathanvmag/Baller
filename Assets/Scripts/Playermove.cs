@@ -71,29 +71,30 @@ public class Playermove : MonoBehaviour {
                 {
                     controlinput(false);
                 }
+                else controlinput(true);
             }
 		
             if (touchV2.esq)
             {
-                controlinput(false);
+                
                 left();
                 touchV2.esq = false;
             }
             else if (touchV2.dir)
             {
-                controlinput(false);
+               
                 right();
                 touchV2.dir = false;
             }
             else if (touchV2.cima)
             {
-                controlinput(false);
+                
                 Up();
                 touchV2.cima = false;
             }
             else if (touchV2.baixo)
             {
-                controlinput(false);
+                
                 Down();
                 touchV2.baixo = false;
             }

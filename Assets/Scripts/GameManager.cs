@@ -28,6 +28,20 @@ public class GameManager : MonoBehaviour
 	private int diamonds;
 	int RevivePrice;
     // Use this for initialization
+    void Awake()
+    {
+        if (Application.platform!= RuntimePlatform.Android || Application.platform!=RuntimePlatform.IPhonePlayer)
+        {
+            Resolution[] Resolutions= Screen.resolutions;
+            foreach(Resolution r in Resolutions)
+            {
+                if (Mathf.Round( r.width/r.height)== 0.625f)
+                {
+                    Screen.SetResolution(r.width,r.height,true);
+                }
+            }
+        }
+    }
     void Start()
     {
 		
