@@ -18,11 +18,21 @@ public class MenuManager : MonoBehaviour {
 	}
 	public void Startgame()
 	{
+        tryAd();
 		StartCoroutine (Animation ());
 	}
+    void tryAd()
+    {
+        if (Random.Range(0, 4) == 1)
+        {
+            Camera.main.GetComponent<Ads>().ShowAd("1");
+        }
+    }
     
 	IEnumerator Animation ()
 	{
+       
+        
 		while (timer < 1) {
 			Gametitle.GetComponent<RectTransform> ().position += Vector3.up * 5 * Time.deltaTime;
             coin.GetComponent<RectTransform>().position += Vector3.up * 2 * Time.deltaTime;
@@ -96,18 +106,22 @@ public class MenuManager : MonoBehaviour {
 	}
 	public void highscorebt()
 	{
+        tryAd();
 		StartCoroutine (highscoreanimation ());
 	}
 	public void backmenu()
 	{
+        tryAd();
 		StartCoroutine (backfromhighscore ());
 	}
 	public void storebt()
 	{
+        tryAd();
 		StartCoroutine (gotoStore ());
 	}
 	public void backstoretomenu()
 	{
+        tryAd();
 		StartCoroutine (backfromStore ());
 	}
     public void buydiamond()

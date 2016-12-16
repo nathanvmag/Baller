@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     GameObject[] places, limits,ballcount;
     [SerializeField]
-    GameObject coin,GameUIs,pausebt,pauseui,gamelose,gameplay,Diamondprefab;
+    GameObject coin,GameUIs,pausebt,pauseui,gamelose,gameplay,Diamondprefab,Showad;
     [SerializeField]
     Playermove player;
     [HideInInspector] public bool escudo;
@@ -214,7 +214,10 @@ public class GameManager : MonoBehaviour
 		if (ballcount.Length == 0&& !player.starttutorial){
           //  Application.LoadLevel(Application.loadedLevel);
 			StartCoroutine(loseanim());
-
+            if (Random.Range(0,2)==1)
+            {
+                Showad.SetActive(true);
+            }
 		}
     }
      
@@ -272,10 +275,24 @@ public class GameManager : MonoBehaviour
 	public void PlayAgain()
 	{
 		if (diamonds >= RevivePrice) {
+            SetDiamonds -= RevivePrice;
+            RevivePrice = RevivePrice == 1 ? 2 : RevivePrice * 2;
 			playagain = true;
 			StartCoroutine (playAgain ());
+            Showad.SetActive(false);
 		}
 	}
+    public void playAgainAds(bool check)
+    {
+        playagain = true;
+        if (check)
+        {
+            StartCoroutine(playAgain());
+        }
+        else { }
+        Showad.SetActive(false);
+
+    }
 	IEnumerator playAgain()
 	{
 		
@@ -286,8 +303,7 @@ public class GameManager : MonoBehaviour
 		gamelose.SetActive (false);
 		gameplay.SetActive (true);
 		player.gameObject.SetActive (true);
-		SetDiamonds-=RevivePrice;
-		RevivePrice = RevivePrice == 1 ? 2 : RevivePrice*2;
+		
 	}
     
 
