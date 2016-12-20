@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour {
-	[SerializeField] GameObject gameUI,Gameobjects,Gametitle,Gameplay,cointx,coin,hightx,Highscorebt,buttons,lobby,store,storeBt,diamond,diamondtx,buydiabt,buydiamonds;
+	[SerializeField] GameObject gameUI,Gameobjects,Gametitle,Gameplay,cointx,coin,hightx,Highscorebt,buttons,lobby,store,fbbutton,storeBt,diamond,diamondtx,buydiabt,buydiamonds;
 	[SerializeField] float animationspeed =10;
 	float timer =0;
 	// Use this for initialization
@@ -44,6 +44,7 @@ public class MenuManager : MonoBehaviour {
 			Highscorebt.GetComponent<RectTransform>().position+=Vector3.up * -4 * Time.deltaTime;
 			storeBt.GetComponent<RectTransform>().position+=Vector3.up * -4 * Time.deltaTime;
             buydiabt.GetComponent<RectTransform>().position += Vector3.up * -4 * Time.deltaTime;
+            fbbutton.GetComponent<RectTransform>().position += Vector3.up * -4 * Time.deltaTime;
 			timer += Time.deltaTime;
 			yield return new WaitForSeconds (Time.deltaTime);
         } yield return new WaitForSeconds(0.2f);
@@ -160,5 +161,9 @@ public class MenuManager : MonoBehaviour {
         store.SetActive(false);
         buydiamond();
 
+    }
+    public void fbPage()
+    {
+        Application.OpenURL("https://www.facebook.com/stormide");
     }
 }
