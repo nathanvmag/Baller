@@ -77,6 +77,9 @@ TagManager:
   - name: Player
     uniqueID: 931751901
     locked: 0
+  - name: Particles
+    uniqueID: 2514952671
+    locked: 0
   - name: Ui
     uniqueID: 2829386819
     locked: 0
