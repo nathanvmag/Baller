@@ -22,7 +22,7 @@
         $connect->query($query1);
 
 	$query = "SELECT MAX( IDENTITY ) AS lastid
-FROM Highscore";
+    FROM Highscore";
        $result = $connect->query($query);
          
        if ($result->num_rows > 0) {

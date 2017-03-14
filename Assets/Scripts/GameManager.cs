@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour
             washighscore = true;
             //PlayerPrefs.SetInt("highscore", score);
         }
-        highscoretx.text = "Best " +highscore.ToString();
+        highscoretx.text = ("Best " +highscore.ToString()).ToUpper();
         PlayerPrefs.SetInt("Coins", Coins);
         if (Coins>15000)
         {
@@ -252,12 +252,14 @@ public class GameManager : MonoBehaviour
             pauseui.SetActive(true);
             pausebt.SetActive(false);
             Time.timeScale = 0;
+            GameObject.Find("Canvas").GetComponent<Canvas>().sortingLayerName = "Ui";
         }
         else
         {
             pauseui.SetActive(false);
             pausebt.SetActive(true);
             Time.timeScale = 1;
+            GameObject.Find("Canvas").GetComponent<Canvas>().sortingLayerName = "Default";
         }
     }
 	IEnumerator loseanim()

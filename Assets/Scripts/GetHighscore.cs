@@ -10,6 +10,7 @@ public class GetHighscore : MonoBehaviour {
 	int control;
 	// Use this for initialization
 	void Start () {
+        
 		 form = new WWWForm ();
 		control = 0;
 		form.AddField ("serviceid", "392");
@@ -46,14 +47,18 @@ public class GetHighscore : MonoBehaviour {
 		if (www.text != "") {			
 			List<string> first = new List<string> ();
 			first.AddRange (www.text.Split (' '));	
-			Dados = new string[first.Count - 1, 2];
-			for (int i = 0; i < first.Count - 1; i++) {
+			
+            int t = first.Count - 1;
+            if (t > 10) t = 10;
+            Dados = new string[t, 2];
+			for (int i = 0; i < t; i++) {
 				string[] split = first [i].Split ('|');
+                
 				Dados [i, 0] = split [0];
 				Dados [i, 1] = split [1];
 			}
 			for (int i = 0; i < Dados.GetLength (0); i++) {
-				GameObject.Find ("Nome" + i).GetComponent<Text> ().text = Dados [i, 0];
+                GameObject.Find("Nome" + i).GetComponent<Text>().text = Dados[i, 0].ToUpper() ;
 				GameObject.Find ("Highscore" + i).GetComponent<Text> ().text = Dados [i, 1];
 			}
 			error.SetActive (false);

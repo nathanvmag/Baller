@@ -9,6 +9,8 @@ public class MenuManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {   
 		timer = 0;
+     
+    
 	}
 	
 	// Update is called once per frame
