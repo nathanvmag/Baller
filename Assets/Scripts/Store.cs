@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 public class Store : MonoBehaviour {
 	int counter =0;
-	[SerializeField]GameObject controller,controller2,coinstx,Ballstore,Playerstore,openball,openplayer,diamondtx,noCash,buycashWithDiamond,btcashfordiamond;
+	[SerializeField]GameObject controller,controller2,coinstx,Ballstore,Playerstore,openball,openplayer,diamondtx,noCash,buycashWithDiamond,btcashfordiamond,bg2,exit2;
 	[SerializeField]GameManager gm;
 	public List<GameObject> Ballstosell;
 	public List<int> Myballs;
@@ -13,10 +13,12 @@ public class Store : MonoBehaviour {
 	public List<int>Myplayers;
 	[SerializeField]Sprite diamond,coin;
 	public int ballindice,playerindice;
-
+	public Sprite[] selects;
+    bool finish;
 	// Use this for initialization
-	void Start () {	
-		openball.GetComponent<Image> ().color = Color.cyan;	
+	void Start () {
+        finish = true;
+		openball.GetComponent<Image> ().sprite = selects [1];
 		Ballstosell = new List<GameObject> ();
 		Myballs = new List<int> ();
 		Playerstosell = new List<GameObject> ();
@@ -150,28 +152,53 @@ public class Store : MonoBehaviour {
 	}
 	public void Left()
 	{
-		if (ballindice!=0) {
-			controller.GetComponent<RectTransform> ().localPosition =new Vector2(controller.GetComponent<RectTransform> ().localPosition.x+ 872,controller.GetComponent<RectTransform> ().localPosition.y);
+		if (ballindice!=0&& finish) {
+            StartCoroutine(AninStore(0, controller));
 		}
 	}
 	public void Right()
 	{
-		if (ballindice!=controller.transform.childCount-1){
-		controller.GetComponent<RectTransform> ().localPosition = new Vector2 (controller.GetComponent<RectTransform> ().localPosition.x - 872, controller.GetComponent<RectTransform> ().localPosition.y);
+		
+		/*if (ballindice!=controller.transform.childCount-1){
+            controller.GetComponent<RectTransform>().localPosition = new Vector2(controller.GetComponent<RectTransform>().localPosition.x - getpixel(controller), controller.GetComponent<RectTransform>().localPosition.y);
 	}
+         */
+        if (finish && ballindice != controller.transform.childCount - 1) StartCoroutine(AninStore(1, controller));
 	}
 	public void Left2()
 	{
-		if (playerindice!=0) {
-			controller2.GetComponent<RectTransform> ().localPosition =new Vector2(controller2.GetComponent<RectTransform> ().localPosition.x+ 872,controller2.GetComponent<RectTransform> ().localPosition.y);
+		if (playerindice!=0&&finish) {
+            StartCoroutine(AninStore(0, controller2));
 		}
 	}
 	public void Right2()
 	{
-		if (playerindice != controller2.transform.childCount - 1) {
-			controller2.GetComponent<RectTransform> ().localPosition = new Vector2 (controller2.GetComponent<RectTransform> ().localPosition.x - 872, controller2.GetComponent<RectTransform> ().localPosition.y);
+		if (playerindice != controller2.transform.childCount - 1&&finish) {
+            StartCoroutine(AninStore(1, controller2));
 		}
 	}
+    float getpixel(GameObject cont)
+    {
+        float a=  cont.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.x+cont.GetComponent<HorizontalLayoutGroup>().spacing;
+        Debug.Log(a);
+        return a;
+    }
+    IEnumerator AninStore(int i ,GameObject g)
+    {
+        float b = 0;
+        finish = false;
+        Vector2 c ;
+        if (i==0)c = new Vector2(g.GetComponent<RectTransform>().localPosition.x + getpixel(g), g.GetComponent<RectTransform>().localPosition.y);
+        else  c= new Vector2(g.GetComponent<RectTransform>().localPosition.x - getpixel(g), g.GetComponent<RectTransform>().localPosition.y);
+                         
+               while(b<1)
+        {
+            g.GetComponent<RectTransform>().localPosition= Vector3.Lerp(g.GetComponent<RectTransform>().localPosition, c, b);
+            b += 0.05f;
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+               finish = true;
+    }
 	public void BuyBt()
 	{
 		if (EventSystem.current.currentSelectedGameObject.transform.FindChild ("Image").gameObject.GetComponent<Image> ().sprite == coin) {
@@ -256,32 +283,46 @@ public class Store : MonoBehaviour {
 		Ballstore.SetActive (true);
 		Playerstore.SetActive (false);
         buycashWithDiamond.SetActive(false);
-		openball.GetComponent<Image> ().color = Color.cyan;
-		openplayer.GetComponent<Image> ().color = Color.white;
-        btcashfordiamond.GetComponent<Image>().color = Color.white;
+		openball.GetComponent<Image> ().sprite = selects [1];
+		openplayer.GetComponent<Image> ().sprite = selects[2];
+        finish = true;
+      
 	}
 	public void OpenPlayerStore()
 	{
+       
         buycashWithDiamond.SetActive(false);
 		Ballstore.SetActive (false);
 		Playerstore.SetActive (true);
-		openball.GetComponent<Image> ().color = Color.white;
-		openplayer.GetComponent<Image> ().color = Color.cyan;
-        btcashfordiamond.GetComponent<Image>().color = Color.white;
+		openball.GetComponent<Image> ().sprite = selects [0];
+		openplayer.GetComponent<Image> ().sprite = selects[3];
+        finish = true;
+       
 	}
     public void OpenCashWithDiamond()
     {
         buycashWithDiamond.SetActive(true);
         Ballstore.SetActive(false);
         Playerstore.SetActive(false);
-        openball.GetComponent<Image>().color = Color.white;
-        openplayer.GetComponent<Image>().color = Color.white;
-        btcashfordiamond.GetComponent<Image>().color = Color.cyan;
+        exit2.SetActive(true);
+        bg2.SetActive(true);
+        openball.SetActive(false);
+        openplayer.SetActive(false);
     }
-    public void BuyCashWithDiamonds()
+    public void CloseCashWithDiamonds()
+    {
+        buycashWithDiamond.SetActive(false);
+        OpenBallStore();
+        exit2.SetActive(false);
+        bg2.SetActive(false);
+        openball.SetActive(true);
+        openplayer.SetActive(true);
+          
+    }
+    public void BuyCashWithDiamonds(int indice)
     {   int price= 0;
         int WinCoin = 0;
-    int indice = int.Parse(EventSystem.current.currentSelectedGameObject.transform.parent.gameObject.name.Substring(5, 1));
+  
         switch (indice)
         {
             case 0:                 

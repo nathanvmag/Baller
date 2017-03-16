@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: aceb47b1260110643909d8c13e061933
-timeCreated: 1489454047
+guid: 77ffdb3c8afad46a8a271d54c61739ed
+timeCreated: 1489540785
 licenseType: Free
 TrueTypeFontImporter:
   serializedVersion: 4
@@ -10,7 +10,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Otari
+  - Orator Std
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
