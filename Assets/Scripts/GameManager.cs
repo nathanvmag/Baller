@@ -265,8 +265,8 @@ public class GameManager : MonoBehaviour
 	IEnumerator loseanim()
 	{
 		gamelose.SetActive (true);
-		price.text = RevivePrice.ToString ()+"x";
-		GameObject.Find ("losescore").GetComponent<Text> ().text = "Score = " + score;
+		price.text = "x"+RevivePrice.ToString ();
+		GameObject.Find ("losescore").GetComponent<Text> ().text = score.ToString();
 		while (Vector3.Distance (gamelose.GetComponent<RectTransform> ().position, new Vector3 (0, 0, 0)) > 0.05f) {
 			gamelose.GetComponent<RectTransform> ().position = Vector3.MoveTowards (gamelose.GetComponent<RectTransform> ().position, new Vector3 (0, 0, 0), 20 * Time.deltaTime);
 			yield return new WaitForSeconds (Time.deltaTime);

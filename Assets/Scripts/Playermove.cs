@@ -15,8 +15,8 @@ public class Playermove : MonoBehaviour {
     [SerializeField]
     GameObject scoretx;
     public GameObject[] controls;
-    string s = "Swipe or touch to move the player";
-    string u = "Do not let the ball leave the screen";
+
+    
     public bool starttutorial = false;
     [SerializeField]
     Sprite[] sprites;
@@ -183,15 +183,16 @@ public class Playermove : MonoBehaviour {
     {
        
         GameObject g = GameObject.FindGameObjectWithTag("Tutorial");
-        g.GetComponent<Text>().text = s;
+		g.SetActive (true);
         StartCoroutine(flashing());
         yield return new WaitForSeconds(7);
-        g.GetComponent<Text>().text = u;
+	
         yield return new WaitForSeconds(1.5f);
         starttutorial = false;
         PlayerPrefs.SetInt("TutorialTimes", PlayerPrefs.GetInt("TutorialTimes") + 1);
         yield return new WaitForSeconds(2);
-        g.GetComponent<Text>().text = "";
+		g.SetActive (false);
+
     } 
     IEnumerator flashing()
     {

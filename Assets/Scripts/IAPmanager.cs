@@ -145,7 +145,7 @@ using UnityEngine.UI;
             // A consumable product has been purchased by this user.
            if (checkall(args)){
                sucessDisplay.SetActive(true);
-               sucessDisplay.transform.FindChild("Diamonds").GetComponent<Text>().text = "You have: " + gm.SetDiamonds.ToString();
+               sucessDisplay.transform.FindChild("Diamonds").GetComponent<Text>().text = gm.SetDiamonds.ToString();
            }           
             // Or ... an unknown product has been purchased by this user. Fill in additional products here....
             else

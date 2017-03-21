@@ -21,6 +21,7 @@ GameObject:
   - 4: {fileID: 4000013062784642}
   - 212: {fileID: 212000012293620336}
   - 61: {fileID: 61000013429100424}
+  - 95: {fileID: 95000010616167688}
   m_Layer: 0
   m_Name: diamond
   m_TagString: Diamond
@@ -35,8 +36,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012773016138}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.04, y: 1.04, z: 0}
-  m_LocalScale: {x: 0.2811055, y: 0.2811055, z: 0.2811055}
+  m_LocalPosition: {x: 1.5224977, y: 1.8951827, z: 0}
+  m_LocalScale: {x: 0.43875137, y: 0.43875137, z: 0.43875137}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
@@ -55,6 +56,23 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 2.8999999, y: 2.8999999}
+--- !u!95 &95000010616167688
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012773016138}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: be1d13b2fac2046cfaea4b9daea98b10, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!212 &212000012293620336
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -84,7 +102,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 58be140042daa4eaa88851169bc3c091, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 701d24efa2e4a4620bffa67b8579bb1e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
